@@ -1,0 +1,29 @@
+{
+  "name": "genartcanvas",
+  "version": "0.0.1",
+  "description": "Generative Art Gallery Canvas",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "watch": "nodemon --exec \"electron .\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/constantdupuis/GenArtCanvas.git"
+  },
+  "keywords": [
+    "Electron",
+    "Generative Art"
+  ],
+  "author": "Constant Dupuis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/constantdupuis/GenArtCanvas/issues"
+  },
+  "homepage": "https://github.com/constantdupuis/GenArtCanvas#readme",
+  "devDependencies": {
+    "electron": "^7.1.9",
+    "nodemon": "^2.0.2"
+  }
+}
