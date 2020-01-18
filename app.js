@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const canvaPaths = [];
+let webAPI;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -23,7 +24,7 @@ function createWindow () {
 
   fs.readdir("./canvas", (err, items) => {
     for (const dirent of items) {
-      console.log(dirent);
+      //console.log(dirent);
       canvaPaths.push( dirent);
     }
     //console.log(canvaPaths);
@@ -38,12 +39,13 @@ function createWindow () {
     }
   });
 
-  // Load index.html into the new BrowserWindow
-  //mainWindow.loadFile('index.html');
+  // set web api rounting
+  setupAPI();
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
 
+  // remove menu bar
   mainWindow.setMenuBarVisibility(false);
 
   // Listen for window being closed
@@ -65,7 +67,7 @@ app.on('activate', () => {
   if (mainWindow === null) createWindow()
 });
 
-
+// load acanvas in main Electron window
 function loadCanvas( canvasId)
 {
   const loadURL = `./canvas/${canvaPaths[canvasId]}/index.html`;
@@ -73,6 +75,59 @@ function loadCanvas( canvasId)
   mainWindow.loadFile(loadURL);
 }
 
+// setup and start WEB API for remote control
+function setupAPI()
+{
+  webAPI = express();
+
+  const apiRoute = express.Router();
+
+  // root route, return info an app
+  apiRoute.get('/', (req, res)=>{
+    res.json({
+      "api":"remote control",
+      "app":"Generative Art Gallery Canvas",
+      "author":"Constant Dupuis"
+    });
+  });
+
+  // list available canvas
+  apiRoute.get('/canvas', (req, res)=>{
+
+    let canvasNfo = [];
+
+    canvaPaths.forEach((e,i) => {
+      let canvaNfo = {};
+      canvaNfo.id = i;
+      canvaNfo.name = e;
+      canvaNfo.desc = "nothing yet";
+      canvasNfo.push(canvaNfo);
+    });
+
+    res.json(canvasNfo);
+  });
+
+  // activate a given canvas
+  apiRoute.post('/canvas/:id', (req, res)=>{
+    
+    //console.log(`Load canvas ${req.params.id}`);
+    if( req.params.id >= canvaPaths.length || req.params.id < 0)
+    {
+      // log this issue
+      console.log(`API: Requested canvas index out of range [${req.params.id}]`);
+      res.status(400).send(`API: Requested canvas index out of range [${req.params.id}]`);  
+    }
+    else
+    {
+      loadCanvas( req.params.id);
+      res.status(200).send(`Canvas [${req.params.id}] loaded`);
+    }
+  });
+
+  webAPI.use('/v0.1', apiRoute);
+
+  webAPI.listen(33366);
+}
 
 
 
