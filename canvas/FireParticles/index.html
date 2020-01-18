@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <style>
+      html,
+      body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+      }
+      
+      /* Scale canvas with resize attribute to full size */
+      canvas[resize] {
+          width: 100%;
+          height: 100%;
+      }
+  </style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Load the Paper.js library -->
+  <script type="text/javascript" src="./js/paper-full.js"></script>
+  <!-- <script type="text/javascript" src="./js/canvas.js"></script> -->
+  <script type="text/paperscript" src="js/paperSrciptCanvas.js" canvas="myCanvas"></script>
   <title>Fire Particles</title>
 </head>
 <body>
-  <h1>Fire Particles</h1>
+  <canvas id="myCanvas" resize></canvas>
 </body>
 </html>

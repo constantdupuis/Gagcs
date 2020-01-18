@@ -17,6 +17,8 @@ function createWindow () {
     title : "Generative Art Gallery Canvas"
   });
 
+  mainWindow.setBackgroundColor("#FFFFFF")
+
   fs.readdir("./canvas", (err, items) => {
     for (const dirent of items) {
       console.log(dirent);
@@ -41,6 +43,8 @@ function createWindow () {
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
+
+  mainWindow.setMenuBarVisibility(false);
 
   // Listen for window being closed
   mainWindow.on('closed',  () => {
