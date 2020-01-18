@@ -1,6 +1,8 @@
 // Modules
 const {app, BrowserWindow} = require('electron');
 const fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const canvaPaths = [];
 
@@ -30,9 +32,7 @@ function createWindow () {
       mainWindow.loadFile('nocanvas.html');
     }
     else{
-      const loadURL = `./canvas/${canvaPaths[0]}/index.html`;
-      console.log("Load first canvas HTML " + loadURL);
-      mainWindow.loadFile(loadURL);
+      loadCanvas( 0);
     }
   });
 
@@ -62,7 +62,12 @@ app.on('activate', () => {
 });
 
 
-
+function loadCanvas( canvasId)
+{
+  const loadURL = `./canvas/${canvaPaths[canvasId]}/index.html`;
+  console.log("Load first canvas HTML " + loadURL);
+  mainWindow.loadFile(loadURL);
+}
 
 
 
