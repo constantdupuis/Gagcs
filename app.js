@@ -1,13 +1,7 @@
 // Modules
 const { app, BrowserWindow } = require("electron");
-const fs = require("fs");
-const express = require("express");
-const bodyParser = require("body-parser");
-const model = require("./model/model");
 
-let webAPI;
-
-console.log("Model version ", model.version);
+const appController = require("./controllers/app_controller");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,34 +18,18 @@ function createWindow() {
 
   mainWindow.setBackgroundColor("#FFFFFF");
 
-  model.load(() => {
-    if (model.canvas.length == 0) {
-      console.log("Load no canvas HTML warning");
-      mainWindow.loadFile("nocanvas.html");
-    } else {
-      loadCanvas(0);
-    }
-  });
+  appController.load(mainWindow);
 
-  // fs.readdir("./canvas", (err, items) => {
-  //   for (const dirent of items) {
-  //     //console.log(dirent);
-  //     canvaPaths.push( dirent);
-  //   }
-  //   //console.log(canvaPaths);
-
-  //   if( canvaPaths.length == 0)
-  //   {
+  // model.load(() => {
+  //   if (model.canvas.length == 0) {
   //     console.log("Load no canvas HTML warning");
-  //     mainWindow.loadFile('nocanvas.html');
+  //     mainWindow.loadFile("nocanvas.html");
+  //   } else {
+  //     loadCanvas(0);
   //   }
-  //   else{
-  //     loadCanvas( 0);
-  //   }
+  //   // set web api rounting
+  //   webServer.setup(33366, model);
   // });
-
-  // set web api rounting
-  setupAPI();
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
@@ -78,51 +56,9 @@ app.on("activate", () => {
   if (mainWindow === null) createWindow();
 });
 
-// load acanvas in main Electron window
-function loadCanvas(canvasId) {
-  const loadURL = `./canvas/${model.canvas[canvasId].path}/index.html`;
-  console.log("Load canvas " + loadURL);
-  mainWindow.loadFile(loadURL);
-}
-
-// setup and start WEB API for remote control
-function setupAPI() {
-  webAPI = express();
-
-  const apiRoute = express.Router();
-
-  // root route, return info an app
-  apiRoute.get("/", (req, res) => {
-    res.json({
-      api: "remote control",
-      app: "Generative Art Gallery Canvas",
-      author: "Constant Dupuis"
-    });
-  });
-
-  // list available canvas
-  apiRoute.get("/canvas", (req, res) => {
-    res.json(model.canvas);
-  });
-
-  // activate a given canvas
-  apiRoute.post("/canvas/:id", (req, res) => {
-    //console.log(`Load canvas ${req.params.id}`);
-    if (req.params.id >= model.canvas.length || req.params.id < 0) {
-      // log this issue
-      console.log(
-        `API: Requested canvas index out of range [${req.params.id}]`
-      );
-      res
-        .status(400)
-        .send(`API: Requested canvas index out of range [${req.params.id}]`);
-    } else {
-      loadCanvas(req.params.id);
-      res.status(200).send(`Canvas [${req.params.id}] loaded`);
-    }
-  });
-
-  webAPI.use("/api.v01", apiRoute);
-
-  webAPI.listen(33366);
-}
+// // load acanvas in main Electron window
+// function loadCanvas(canvasId) {
+//   const loadURL = `./canvas/${model.canvas[canvasId].path}/index.html`;
+//   console.log("Load canvas " + loadURL);
+//   mainWindow.loadFile(loadURL);
+// }
