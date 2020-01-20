@@ -81,7 +81,7 @@ app.on("activate", () => {
 // load acanvas in main Electron window
 function loadCanvas(canvasId) {
   const loadURL = `./canvas/${model.canvas[canvasId].path}/index.html`;
-  console.log("Load first canvas HTML " + loadURL);
+  console.log("Load canvas " + loadURL);
   mainWindow.loadFile(loadURL);
 }
 
@@ -122,7 +122,7 @@ function setupAPI() {
     }
   });
 
-  webAPI.use("/v0.1", apiRoute);
+  webAPI.use("/api.v01", apiRoute);
 
   webAPI.listen(33366);
 }
