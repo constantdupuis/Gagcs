@@ -2,11 +2,13 @@
  * WebServer for Generative Art Gallery Canvas
  */
 const express = require("express");
+const bodyParser = require("body-parser") 
 
 let webServer = {};
 webServer.expInst = express();
 webServer.model = null;
 webServer.appController = null;
+
 
 webServer.setup = function(port, model, appController) {
   this.model = model;
@@ -20,7 +22,7 @@ webServer.setup = function(port, model, appController) {
   // root route, return info an app
   apiRoute.get("/", (req, res) => {
     res.json({
-      api: "remote control",
+      api: "Remote Control",
       app: "Generative Art Gallery Canvas",
       author: "Constant Dupuis"
     });
@@ -48,8 +50,13 @@ webServer.setup = function(port, model, appController) {
     }
   });
 
+  // add body-parser middleware
+  this.expInst.use( bodyParser.urlencoded({ extended: false }) );
+
+  // add RESTful middleware
   this.expInst.use("/api.v01", apiRoute);
 
+  // start web server
   this.expInst.listen(33366);
 };
 
