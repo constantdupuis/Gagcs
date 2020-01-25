@@ -2,20 +2,45 @@
  * WebServer for Generative Art Gallery Canvas
  */
 const express = require("express");
-const bodyParser = require("body-parser") 
+const bodyParser = require("body-parser");
 
 let webServer = {};
 webServer.expInst = express();
 webServer.model = null;
 webServer.appController = null;
 
-
+/**
+ * Setup the web server
+ */
 webServer.setup = function(port, model, appController) {
   this.model = model;
   this.appController = appController;
+
+  // inject pug template engine
+  // byr default look for pug emplate in folder "views"
+  this.expInst.set("view engine", "pug");
+
+  // add body-parser middleware
+  this.expInst.use(bodyParser.urlencoded({ extended: false }));
+
+  //this.expInst.use(express.static());
+
+  // add REST api routes
+  this.addRESTRoutes();
+
+  // add embeded remote control web pages routes
+  this.addRemoteControlWebPagesRoutes();
+
+  // start web server
+  this.expInst.listen(this.model.port);
+};
+
+webServer.addRESTRoutes = function() {
   console.log(
-    `Setup RESTApi with model versio ${model.version} on port ${port}`
+    `Setup RESTApi with model version ${this.model.version} on port ${this.model.port}`
   );
+
+  console.log(this.expInst);
 
   const apiRoute = express.Router();
 
@@ -50,14 +75,21 @@ webServer.setup = function(port, model, appController) {
     }
   });
 
-  // add body-parser middleware
-  this.expInst.use( bodyParser.urlencoded({ extended: false }) );
-
   // add RESTful middleware
   this.expInst.use("/api.v01", apiRoute);
+};
 
-  // start web server
-  this.expInst.listen(33366);
+webServer.addRemoteControlWebPagesRoutes = function() {
+  console.log(`Setup remote control web pages `);
+
+  const remote = express.Router();
+
+  remote.get("/", (req, res, next) => {
+    res.render("remote");
+  });
+
+  // add remote control web pages routes
+  this.expInst.use("/", remote);
 };
 
 module.exports = webServer;

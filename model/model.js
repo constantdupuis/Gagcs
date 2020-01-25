@@ -6,6 +6,7 @@ const path = require("path");
 
 let model = {};
 model.version = "01";
+model.port = 33366;
 model.canvas = [];
 
 /**
