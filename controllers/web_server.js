@@ -23,13 +23,20 @@ webServer.setup = function(port, model, appController) {
   // add body-parser middleware
   this.expInst.use(bodyParser.urlencoded({ extended: false }));
 
-  //this.expInst.use(express.static());
+  // add serving static files, css, js, fonts, images..
+  // from public folder of the project
+  this.expInst.use(express.static("public"));
 
   // add REST api routes
   this.addRESTRoutes();
 
   // add embeded remote control web pages routes
   this.addRemoteControlWebPagesRoutes();
+
+  // add 404 page
+  this.expInst.use((req, res, next) => {
+    res.status(404).render("404");
+  });
 
   // start web server
   this.expInst.listen(this.model.port);
@@ -39,8 +46,6 @@ webServer.addRESTRoutes = function() {
   console.log(
     `Setup RESTApi with model version ${this.model.version} on port ${this.model.port}`
   );
-
-  console.log(this.expInst);
 
   const apiRoute = express.Router();
 
