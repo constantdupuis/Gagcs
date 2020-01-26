@@ -6,6 +6,27 @@ html(lang="en")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
     title Gagcs Remote
     link(rel="stylesheet", href="css/bulma.css")
-    script(src="js/fontawesome/all.js", defer)
+    link(rel="stylesheet", href="css/custom.css")
+    script(src="js/fontawesome/all.js", defer="")
+    script(src="js/remote.js", defer="")
   body
-    p Bonjour
+    section(class="hero is-primary is-small")
+      div( class="hero-body")
+        div( class="container")
+          h1(class="title is-size-1  appName has-text-black") Gagcs
+          h2( class="subtitle") Generative Art Gallery remote control  
+
+    section(class="section")
+      div(class="container")
+        each canv in model.canvas
+          article(class="media")
+            figure( class="media-left")
+              p(class="image is-64x64")
+                img(src="https://bulma.io/images/placeholders/128x128.png")
+            div(class="media-content") 
+              h1(class="title") #{canv.name}
+              h1(class="subtitle") #{canv.description}
+            div(class="media-right")
+              button(class="button is-primary" id=`canvas-${canv.id}`) Show 
+        else
+          h1 No Canavas in this gallery !

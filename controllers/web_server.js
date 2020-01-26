@@ -90,7 +90,7 @@ webServer.addRemoteControlWebPagesRoutes = function() {
   const remote = express.Router();
 
   remote.get("/", (req, res, next) => {
-    res.render("remote");
+    res.render("remote", { model: this.model });
   });
 
   // add remote control web pages routes

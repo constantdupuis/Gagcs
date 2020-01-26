@@ -24,7 +24,6 @@ model.load = function(callback) {
       let rawdata = fs.readFileSync(infoPath);
       let canvasNfo = JSON.parse(rawdata);
       canvasNfo.id = i;
-      canvasNfo.path = e;
       this.canvas.push(canvasNfo);
     });
 
