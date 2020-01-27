@@ -3,6 +3,7 @@
  */
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 let webServer = {};
 webServer.expInst = express();
@@ -42,6 +43,9 @@ webServer.setup = function(port, model, appController) {
   this.expInst.listen(this.model.port);
 };
 
+/**
+ * REST full api routes building
+ */
 webServer.addRESTRoutes = function() {
   console.log(
     `Setup RESTApi with model version ${this.model.version} on port ${this.model.port}`
@@ -60,7 +64,7 @@ webServer.addRESTRoutes = function() {
 
   // list available canvas
   apiRoute.get("/canvas", (req, res) => {
-    res.json(model.canvas);
+    res.json(this.model.canvas);
   });
 
   // activate a given canvas
@@ -84,13 +88,31 @@ webServer.addRESTRoutes = function() {
   this.expInst.use("/api.v01", apiRoute);
 };
 
+/**
+ * Remote control web pages routes building
+ */
 webServer.addRemoteControlWebPagesRoutes = function() {
   console.log(`Setup remote control web pages `);
 
   const remote = express.Router();
 
+  // main page
   remote.get("/", (req, res, next) => {
     res.render("remote", { model: this.model });
+  });
+
+  // get canvas thumb route
+  remote.get("/canvas/:id/thumb", (req, res, next) => {
+    let cid = req.params.id;
+    const c = this.model.canvas.find(el => el.id == cid);
+    if (c) {
+      //res.send(`Canvas ${cid} has a name of ${c.name} and path of ${c.path}`);
+      res.sendFile(
+        path.join(__dirname, "..", "canvas", c.folder, "thumbnail.jpg")
+      );
+    } else {
+      res.status(404).send("No canvas for id " + cid);
+    }
   });
 
   // add remote control web pages routes

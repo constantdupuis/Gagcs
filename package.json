@@ -1,6 +1,6 @@
 {
-  "name": "genartcanvas",
-  "version": "0.0.1",
+  "name": "gagcs",
+  "version": "0.1.0",
   "description": "Generative Art Gallery Canvas",
   "main": "app.js",
   "scripts": {

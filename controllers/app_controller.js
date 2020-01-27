@@ -22,7 +22,7 @@ ctrl.load = function(mainWindow) {
 };
 
 ctrl.loadCanvas = function(canvasId) {
-  const loadURL = `./canvas/${this.model.canvas[canvasId].path}/index.html`;
+  const loadURL = `./canvas/${this.model.canvas[canvasId].folder}/index.html`;
   console.log("Load canvas " + loadURL);
   this.mainWindow.loadFile(loadURL);
 };
