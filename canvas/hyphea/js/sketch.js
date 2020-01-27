@@ -68,6 +68,7 @@ function setup() {
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
+  console.log(`dir ${newSeedDot.dir}`);
   dots.push(newSeedDot);
   newSeedDot.draw();
   let newSeed = new Seed(newSeedDot);
@@ -79,6 +80,7 @@ function setup() {
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
+  console.log(`dir ${newSeedDot.dir}`);
   dots.push(newSeedDot);
   newSeedDot.draw();
   newSeed = new Seed(newSeedDot);
@@ -90,6 +92,7 @@ function setup() {
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
+  console.log(`dir ${newSeedDot.dir}`);
   dots.push(newSeedDot);
   newSeedDot.draw();
   newSeed = new Seed(newSeedDot);
@@ -101,6 +104,7 @@ function setup() {
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
+  console.log(`dir ${newSeedDot.dir}`);
   dots.push(newSeedDot);
   newSeedDot.draw();
   newSeed = new Seed(newSeedDot);
