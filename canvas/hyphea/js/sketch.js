@@ -136,7 +136,7 @@ function draw() {
   //console.log(`${alives} seed alive`);
   if( leftAlives == 0)
   {
-    console.log("All seeds deed, stop loop");
+    console.log("All seeds dead, stop drawing");
     noLoop();
   }
 
