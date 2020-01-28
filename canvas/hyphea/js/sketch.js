@@ -15,7 +15,7 @@ let dotMoveFactor;
  *
  */
 function setup() {
-  // define params constants
+  // define algo params
   maxNewPosTries = 10;
   maxDirectionDeviationAngle = QUARTER_PI / 8.0;
   seedInitialRadius = 6.0;
