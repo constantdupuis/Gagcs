@@ -1,33 +1,18 @@
-<!DOCTYPE html>
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(http-equiv="X-UA-Compatible", content="ie=edge")
-    title Gagcs Remote
-    link(rel="stylesheet", href="css/bulma.css")
-    link(rel="stylesheet", href="css/custom.css")
-    script(src="js/fontawesome/all.js", defer="")
-    script(src="js/remote.js", defer="")
-  body
-    section(class="hero is-primary is-small")
-      div( class="hero-body")
-        div( class="container")
-          h1(class="title is-size-1  appName has-text-black") Gagcs
-          h2( class="subtitle") Generative Art Gallery
-            p(class="is-size-6") Remote Control
+extends layouts/remote-layout.pug
 
-    section(class="section canvas-list")
-      div(class="container")
-        each canv in model.canvas
-          article(class="media")
-            figure( class="media-left")
-              p(class="image is-64x64")
-                img(src=`${canv.path}`)
-            div(class="media-content") 
-              h1(class="title is-size-4") #{canv.name}
-              h1(class="subtitle is-size-6") #{canv.description}
-            div(class="media-right")
-              button(class="button is-primary show-canvas" id=`canvas-${canv.id}`) Show 
-        else
-          h1 No Canavas in this gallery !
+block content
+  section(class="section")
+    div(class="columns is-multiline")
+      each canv in model.canvas
+        div( class="column is-one-third-tablet is-one-forth-desktop is-one-fifth-fullhd is-one-forth-widescreen")
+          div( class="card")
+            div(class="card-image")
+              figure(class="images is-1by1")
+                img(src=`${canv.path}` alt="Thumb !")
+            div(class="card-content")
+              p(class="title is-size-4") #{canv.name}
+              p(class="subtitle is-size-6") #{canv.description}
+              button(class="button is-primary show-canvas" id=`canvas-${canv.id}`) Show
+      else
+        h1 No Canavas in this gallery !
+

@@ -101,6 +101,20 @@ webServer.addRemoteControlWebPagesRoutes = function() {
     res.render("remote", { model: this.model });
   });
 
+  // main page
+  remote.get("/remote", (req, res, next) => {
+    res.render("remote", { model: this.model });
+  });
+
+  // main page
+  remote.get("/remote-grid", (req, res, next) => {
+    res.render("remote", { model: this.model });
+  });
+
+  remote.get("/remote-list", (req, res, next) => {
+    res.render("remote-list", { model: this.model });
+  });
+
   // get canvas thumb route
   remote.get("/canvas/:id/thumb", (req, res, next) => {
     let cid = req.params.id;

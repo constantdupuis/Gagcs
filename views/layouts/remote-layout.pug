@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Gagcs Remote
+    link(rel="stylesheet", href="css/bulma.css")
+    link(rel="stylesheet", href="css/custom.css")
+    script(src="js/fontawesome/all.js", defer="")
+    script(src="js/remote.js", defer="")
+  body
+    section(class="hero is-primary is-small")
+      div( class="hero-body")
+        div( class="container")
+          h1(class="title is-size-1  appName has-text-black") Gagcs
+          //- h2( class="subtitle") Generative Art Gallery
+          //- p(class="is-size-6") Remote Control
+      div(class="hero-footer")
+        div(class="navbar")
+          div(class="container")
+            div(class="navbar-end")
+              div(class="navbar-item active")
+                span(class="icon is-large")
+                  a(href="remote-grid" class="has-text-black")
+                    i(class="fas fa-2x fa-th")
+              div(class="navbar-item")
+                span(class="icon is-large")
+                  a(href="remote-list" class="has-text-black")
+                    i(class="fas fa-2x fa-th-list")
+            
+    block content

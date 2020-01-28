@@ -1,12 +1,3 @@
-/**
- * TODO add remote logic
- */
-// const canvasList = document.querySelector(".canvas-list");
-// console.log(canvasList);
-
-// canvasList.addEventListener("click", e => {
-//   console.log(e.target);
-// });
 
 const canvasShowBtns = document.querySelectorAll(".show-canvas");
 console.log(canvasShowBtns);

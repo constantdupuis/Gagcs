@@ -1,0 +1,17 @@
+extends layouts/remote-layout.pug
+
+block content
+  section(class="section")
+    div(class="container")
+      each canv in model.canvas
+        article(class="media")
+          figure( class="media-left")
+            p(class="image is-64x64")
+              img(src=`${canv.path}`)
+          div(class="media-content") 
+            h1(class="title is-size-4") #{canv.name}
+            h1(class="subtitle is-size-6") #{canv.description}
+          div(class="media-right")
+            button(class="button is-primary show-canvas" id=`canvas-${canv.id}`) Show 
+      else
+        h1 No Canavas in this gallery !
