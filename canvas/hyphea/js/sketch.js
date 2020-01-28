@@ -1,41 +1,4 @@
-/**
- * Classe definitions
- */
 
-/**
- * Dot : a dot to draw with main direction of next dot
- */
-class Dot {
-  posx = 0; // dot pos x
-  posy = 0; // dot pos Y
-  radius = 0; // dot radius
-  dir = 0; // dot direction
-
-  constructor(posx, posy, radius) {
-    this.posx = posx;
-    this.posy = posy;
-    this.radius = radius;
-  }
-
-  draw() {
-    fill(0);
-    noStroke();
-    circle(this.posx, this.posy, this.radius * 2);
-  }
-}
-
-/**
- * Seed : a seed, where to start drawing a dot
- */
-class Seed {
-  dot;
-  alive = true;
-
-  constructor(dot) {
-    this.dot = dot;
-    this.alive = true;
-  }
-}
 /**
  * Global Variables
  */
@@ -45,6 +8,8 @@ let seed, lastSeed;
 let maxNewPosTries;
 let maxDirectionDeviationAngle;
 let seedInitialRadius;
+let dotMinimalRadius;
+let dotMoveFactor;
 
 /**
  *
@@ -52,8 +17,10 @@ let seedInitialRadius;
 function setup() {
   // define params constants
   maxNewPosTries = 10;
-  maxDirectionDeviationAngle = QUARTER_PI / 4.0;
-  seedInitialRadius = 5;
+  maxDirectionDeviationAngle = QUARTER_PI / 8.0;
+  seedInitialRadius = 6.0;
+  dotMinimalRadius = 4.0;
+  dotMoveFactor = 2.0;
 
   // setup canavs
   createCanvas(windowWidth, windowHeight);
@@ -62,53 +29,57 @@ function setup() {
   // set initial seeds
   //randomSeed(1033987);
 
+  let horizShift = (windowWidth/2)*0.25;
+  let verticalShift = (windowHeight/2)*0.25;
   let newSeedDot = new Dot(
-    windowWidth / 2 + 50,
+    windowWidth / 2 + horizShift,
     windowHeight / 2,
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
-  console.log(`dir ${newSeedDot.dir}`);
   dots.push(newSeedDot);
   newSeedDot.draw();
   let newSeed = new Seed(newSeedDot);
   seeds.push(newSeed);
 
   newSeedDot = new Dot(
-    windowWidth / 2 - 50,
+    windowWidth / 2 - horizShift,
     windowHeight / 2,
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
-  console.log(`dir ${newSeedDot.dir}`);
-  dots.push(newSeedDot);
+   dots.push(newSeedDot);
   newSeedDot.draw();
   newSeed = new Seed(newSeedDot);
   seeds.push(newSeed);
 
   newSeedDot = new Dot(
     windowWidth / 2,
-    windowHeight / 2 - 50,
+    windowHeight / 2 - verticalShift,
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
-  console.log(`dir ${newSeedDot.dir}`);
-  dots.push(newSeedDot);
+   dots.push(newSeedDot);
   newSeedDot.draw();
   newSeed = new Seed(newSeedDot);
   seeds.push(newSeed);
 
   newSeedDot = new Dot(
     windowWidth / 2,
-    windowHeight / 2 + 50,
+    windowHeight / 2 + verticalShift,
     seedInitialRadius
   );
   newSeedDot.dir = random() * TWO_PI;
-  console.log(`dir ${newSeedDot.dir}`);
   dots.push(newSeedDot);
   newSeedDot.draw();
   newSeed = new Seed(newSeedDot);
   seeds.push(newSeed);
+
+
+  seeds.forEach((s, i) => {
+    console.log(s);
+  });
+
 }
 
 /**
@@ -118,12 +89,13 @@ function draw() {
   let newLocationFound = false;
 
   seeds.forEach((s, i) => {
+    if( !s.alive) return;
     let d = s.dot;
     for (let t = 0; t < maxNewPosTries; t++) {
-      // get a new dir based on previous one
-      let newAngle = d.dir + randomGaussian(0, maxDirectionDeviationAngle);
+      
       // make it a vector of lenght 2
-      let newPosDiff = p5.Vector.fromAngle(newAngle, 2.0);
+      let newPosDiff = p5.Vector.fromAngle(d.dir, dotMoveFactor);
+      //console.log(newPosDiff, " fom ", d.dir);
 
       let newPosX = d.posx + newPosDiff.x;
       let newPosY = d.posy + newPosDiff.y;
@@ -131,12 +103,13 @@ function draw() {
       if (isPosFree(newPosX, newPosY, d.radius)) {
         // limit minimum radius
         let newRadius = d.radius;
-        if (newRadius > 1.5) {
+        if (newRadius > dotMinimalRadius) {
           newRadius -= 0.05;
         }
 
         // create a new dot
         let newDot = new Dot(newPosX, newPosY, newRadius);
+        newDot.dir = d.dir + randomGaussian(0, maxDirectionDeviationAngle);
         newDot.draw();
         dots.push(newDot);
         s.dot = newDot;
@@ -154,58 +127,19 @@ function draw() {
     }
   });
 
-  // for (let t = 0; t < maxNewPosTries; t++) {
-  //   // get a new dir based on previous one
-  //   let newAngle =
-  //     lastSeed.dot.dir + randomGaussian(0, maxDirectionDeviationAngle);
-  //   // make it a vector of lenght 2
-  //   let newPosDiff = p5.Vector.fromAngle(newAngle, 2.0);
+  // if all seeds are dead stop loop
+  let leftAlives = seeds.reduce((acc, e) =>{ 
+    //console.log(acc, e);
+    if( e.alive ) acc++;
+    return acc;
+  }, 0);
+  //console.log(`${alives} seed alive`);
+  if( leftAlives == 0)
+  {
+    console.log("All seeds deed, stop loop");
+    noLoop();
+  }
 
-  //   let newPosX = lastSeed.dot.posx + newPosDiff.x;
-  //   let newPosY = lastSeed.dot.posy + newPosDiff.y;
-
-  //   if (isPosFree(newPosX, newPosY, lastSeed.dot.radius)) {
-  //     // limit minimum radius
-  //     let newRadius = lastSeed.dot.radius;
-  //     if (newRadius > 1.5) {
-  //       newRadius -= 0.05;
-  //     }
-
-  //     // create a new dot
-  //     let newDot = new Dot(newPosX, newPosY, newRadius);
-  //     newDot.draw();
-  //     dots.push(newDot);
-  //     lastSeed.dot = newDot;
-  //     // check if dots are leaving canvas
-  //     if (
-  //       newDot.posx > windowWidth ||
-  //       newDot.posx < 0 ||
-  //       newDot.posy > windowHeight ||
-  //       newDot.posy < 0
-  //     ) {
-  //       lastSeed.alive = false;
-  //     }
-  //     break;
-  //   }
-  // }
-
-  // If all seed are dead stop loop
-
-  // while (!newLocationFound) {
-  //   let newAngle = lastSeed.dir + randomGaussian(0, QUARTER_PI / 4.0);
-  //   let newPosDiff = p5.Vector.fromAngle(newAngle, 2.0);
-  //   let newPosX = lastSeed.posx + newPosDiff.x;
-  //   let newPosY = lastSeed.posy + newPosDiff.y;
-  //   if (isPosFree(newPosX, newPosY, lastSeed.radius)) {
-  //     let newSeed = new Dot(newPosX, newPosY, lastSeed.radius - 0.05);
-  //     newSeed.draw();
-  //     branches.push(newSeed);
-  //     lastSeed = newSeed;
-  //     newLocationFound = true;
-  //   } else {
-  //     // check we dont loop to much
-  //   }
-  // }
 }
 
 /**
