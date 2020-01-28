@@ -26,9 +26,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(255);
 
-  // set initial seeds
-  //randomSeed(1033987);
-
+  
+  // create few values
   let horizShift = (windowWidth/2)*0.25;
   let verticalShift = (windowHeight/2)*0.25;
   let newSeedDot = new Dot(
@@ -75,10 +74,10 @@ function setup() {
   newSeed = new Seed(newSeedDot);
   seeds.push(newSeed);
 
-
-  seeds.forEach((s, i) => {
-    console.log(s);
-  });
+  // debug log each seed
+  // seeds.forEach((s, i) => {
+  //   console.log(s);
+  // });
 
 }
 
