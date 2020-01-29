@@ -9,24 +9,26 @@ html(lang="en")
     link(rel="stylesheet", href="css/custom.css")
     script(src="js/fontawesome/all.js", defer="")
     script(src="js/remote.js", defer="")
+    script(src="js/bulmahelpers.js", defer="")
   body
-    section(class="hero is-primary is-small")
-      div( class="hero-body")
-        div( class="container")
-          h1(class="title is-size-1 appName has-text-black") Gagcs
-          h2(class="subtitle") Generative Art Gallery
-          h3(class="subtitle is-size-6") Remote Control
-      div(class="hero-footer")
-        div(class="navbar")
-          div(class="container")
-            div(class="navbar-end")
-              div(class="navbar-item active")
-                span(class="icon is-large")
-                  a(href="remote-grid" class="has-text-black")
-                    i(class="fas fa-2x fa-th")
-              div(class="navbar-item")
-                span(class="icon is-large")
-                  a(href="remote-list" class="has-text-black")
-                    i(class="fas fa-2x fa-th-list")
+    section.hero.is-primary.is-small
+      div.hero-head
+        nav.navbar
+          div.container
+            div.navbar-brand 
+              .navbar-item
+                img(src="logo.png")
+              span.navbar-burger.burger(data-target="homeMenu")
+                span
+                span
+                span
+            div#homeMenu.navbar-menu
+              div.navbar-end
+                a.navbar-item(href="remote-list") List
+                a.navbar-item(href="remote") Grid
+      .hero-body.has-text-centered
+          h1.titre.is-size-1.appName.has-text-black Gagcs
+          h2.subtitle Generative Art Gallery Canvas
+            //-p.is-size-6.navbar-item Remote Control
             
     block content
