@@ -20,17 +20,6 @@ function createWindow() {
 
   appController.load(mainWindow);
 
-  // model.load(() => {
-  //   if (model.canvas.length == 0) {
-  //     console.log("Load no canvas HTML warning");
-  //     mainWindow.loadFile("nocanvas.html");
-  //   } else {
-  //     loadCanvas(0);
-  //   }
-  //   // set web api rounting
-  //   webServer.setup(33366, model);
-  // });
-
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
 
@@ -56,9 +45,3 @@ app.on("activate", () => {
   if (mainWindow === null) createWindow();
 });
 
-// // load acanvas in main Electron window
-// function loadCanvas(canvasId) {
-//   const loadURL = `./canvas/${model.canvas[canvasId].path}/index.html`;
-//   console.log("Load canvas " + loadURL);
-//   mainWindow.loadFile(loadURL);
-// }
