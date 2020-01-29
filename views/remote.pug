@@ -2,17 +2,18 @@ extends layouts/remote-layout.pug
 
 block content
   section(class="section")
-    div(class="columns is-multiline")
-      each canv in model.canvas
-        div( class="column is-one-third-tablet is-one-forth-desktop is-one-fifth-fullhd is-one-forth-widescreen")
-          div( class="card")
-            div(class="card-image")
-              figure(class="images is-1by1")
-                img(src=`${canv.path}` alt="Thumb !")
-            div(class="card-content")
-              p(class="title is-size-4") #{canv.name}
-              p(class="subtitle is-size-6") #{canv.description}
-              button(class="button is-primary show-canvas" id=`canvas-${canv.id}`) Show
-      else
-        h1 No Canavas in this gallery !
+    div(class="container")
+      div(class="columns is-multiline")
+        each canv in model.canvas
+          div( class="column is-one-third-tablet is-one-forth-desktop is-one-fifth-fullhd is-one-forth-widescreen")
+            div( class="card")
+              div(class="card-image")
+                figure(class="images is-1by1")
+                  img(src=`${canv.path}` alt="Thumb !")
+              div(class="card-content")
+                p(class="title is-size-4") #{canv.name}
+                p(class="subtitle is-size-6") #{canv.description}
+                button(class="button is-primary show-canvas" id=`canvas-${canv.id}`) Show
+        else
+          h1 No Canavas in this gallery !
 

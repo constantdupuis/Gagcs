@@ -4,7 +4,7 @@
  */
 const dots = [];
 const seeds = [];
-let seed, lastSeed;
+
 let maxNewPosTries;
 let maxDirectionDeviationAngle;
 let seedInitialRadius;
@@ -28,49 +28,50 @@ function setup() {
 
   
   // create few values
-  let horizShift = (windowWidth/2)*0.25;
-  let verticalShift = (windowHeight/2)*0.25;
+  let shift = (windowHeight/2)*0.25;
+
   let newSeedDot = new Dot(
-    windowWidth / 2 + horizShift,
-    windowHeight / 2,
-    seedInitialRadius
+    createVector(windowWidth / 2 + shift, windowHeight / 2),
+    seedInitialRadius,
+    random() * TWO_PI
   );
-  newSeedDot.dir = random() * TWO_PI;
   dots.push(newSeedDot);
   newSeedDot.draw();
+
   let newSeed = new Seed(newSeedDot);
   seeds.push(newSeed);
 
+    
   newSeedDot = new Dot(
-    windowWidth / 2 - horizShift,
-    windowHeight / 2,
-    seedInitialRadius
+    createVector(windowWidth / 2 - shift, windowHeight / 2),
+    seedInitialRadius,
+    random() * TWO_PI
   );
-  newSeedDot.dir = random() * TWO_PI;
-   dots.push(newSeedDot);
-  newSeedDot.draw();
-  newSeed = new Seed(newSeedDot);
-  seeds.push(newSeed);
-
-  newSeedDot = new Dot(
-    windowWidth / 2,
-    windowHeight / 2 - verticalShift,
-    seedInitialRadius
-  );
-  newSeedDot.dir = random() * TWO_PI;
-   dots.push(newSeedDot);
-  newSeedDot.draw();
-  newSeed = new Seed(newSeedDot);
-  seeds.push(newSeed);
-
-  newSeedDot = new Dot(
-    windowWidth / 2,
-    windowHeight / 2 + verticalShift,
-    seedInitialRadius
-  );
-  newSeedDot.dir = random() * TWO_PI;
   dots.push(newSeedDot);
   newSeedDot.draw();
+  
+  newSeed = new Seed(newSeedDot);
+  seeds.push(newSeed);
+
+  newSeedDot = new Dot(
+    createVector(windowWidth / 2, windowHeight / 2 - shift),
+    seedInitialRadius,
+    random() * TWO_PI
+  );
+  dots.push(newSeedDot);
+  newSeedDot.draw();
+  
+  newSeed = new Seed(newSeedDot);
+  seeds.push(newSeed);
+
+  newSeedDot = new Dot(
+    createVector(windowWidth / 2, windowHeight / 2 + shift),
+    seedInitialRadius,
+    random() * TWO_PI
+  );
+  dots.push(newSeedDot);
+  newSeedDot.draw();
+  
   newSeed = new Seed(newSeedDot);
   seeds.push(newSeed);
 
@@ -88,42 +89,43 @@ function draw() {
   let newLocationFound = false;
 
   seeds.forEach((s, i) => {
-    if( !s.alive) return;
-    let d = s.dot;
-    for (let t = 0; t < maxNewPosTries; t++) {
-      
-      // make it a vector of lenght 2
-      let newPosDiff = p5.Vector.fromAngle(d.dir, dotMoveFactor);
-      //console.log(newPosDiff, " fom ", d.dir);
 
-      let newPosX = d.posx + newPosDiff.x;
-      let newPosY = d.posy + newPosDiff.y;
+    if( s.isDead()) return;
+    
+    let d = s.seedDot();
 
-      if (isPosFree(newPosX, newPosY, d.radius)) {
-        // limit minimum radius
-        let newRadius = d.radius;
-        if (newRadius > dotMinimalRadius) {
-          newRadius -= 0.05;
-        }
-
-        // create a new dot
-        let newDot = new Dot(newPosX, newPosY, newRadius);
-        newDot.dir = d.dir + randomGaussian(0, maxDirectionDeviationAngle);
-        newDot.draw();
-        dots.push(newDot);
-        s.dot = newDot;
-        // check if dots are leaving canvas
-        if (
-          newDot.posx > windowWidth ||
-          newDot.posx < 0 ||
-          newDot.posy > windowHeight ||
-          newDot.posy < 0
-        ) {
-          s.alive = false;
-        }
-        break;
-      }
+    // limit minimum radius
+    let newRadius = d.radius;
+    if (newRadius > dotMinimalRadius) {
+      newRadius -= 0.01;
     }
+      
+    // create new pos
+    let candidatePos = p5.Vector.add(d.pos, p5.Vector.fromAngle(d.dir, dotMoveFactor));
+    //console.log(newPosDiff, " fom ", d.dir);
+    // create candidate dot
+    let candidateDot = new Dot( candidatePos, 
+        newRadius, 
+        d.dir + randomGaussian(0, maxDirectionDeviationAngle));
+
+    // check if it fit-in
+    if (isPosFree(s, candidateDot)) {
+      
+      candidateDot.draw();
+      dots.push(candidateDot);
+      s.add(candidateDot);
+      // check if dots are leaving canvas
+      if (
+        candidateDot.posx > windowWidth ||
+        candidateDot.posx < 0 ||
+        candidateDot.posy > windowHeight ||
+        candidateDot.posy < 0
+      ) {
+        s.alive = false;
+      }
+
+    }
+    
   });
 
   // if all seeds are dead stop loop
@@ -132,6 +134,7 @@ function draw() {
     if( e.alive ) acc++;
     return acc;
   }, 0);
+
   //console.log(`${alives} seed alive`);
   if( leftAlives == 0)
   {
@@ -149,17 +152,23 @@ function windowResize() {
 }
 
 /**
- * Check is pos is free
+ * Check if pos is free
  */
-function isPosFree(x, y, radius) {
+function isPosFree(currentSeed, candidateDot) {
+  
   let free = true;
+  let currentDot = currentSeed.seedDot();
+
   for (let d in dots) {
-    let dx = x - d.posx;
-    let dy = y - d.posy;
-    let ns = createVector(dx, dy);
-    if (ns.magSq() > radius * 2 * (radius * 2)) {
-      free = false;
-      break;
+    if(!currentSeed.isNeighbour(d))
+    {
+      let delta = p5.Vector.sub(candidateDot.pos, currentDot.pos);
+      let treshold = ((candidateDot.radius + currentDot.radius)*2) * ((candidateDot.radius + currentDot.radius)*2);
+
+      if (delta.mag() < 3) {
+        free = false;
+        break;
+      }
     }
   }
   return free;
