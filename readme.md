@@ -1,8 +1,8 @@
 # Generative Art Gallery Canvas
 
-Project started inspired by [FRAMED](https://frm.fm/) and to learn HTML/CSS/JS, Node.js, Express.js, Electron.js, TypeScript, SASS, p5.js, paper.js, THREE.js...
+Project started inspired by [FRAMED](https://frm.fm/) and the will to learn HTML/CSS/JS, Node.js, Express.js, Electron.js, TypeScript, SASS, p5.js, paper.js, THREE.js...
  
-The goal is to have a Electron app that can load different generative art developed with Web technics (HTML/CSS/JS, WebGL, HTML Canvas, p5.js, THREE.js, Paper.js...).
+The goal is to have a Electron app that can load different generative art canvas, developed with Web technics (HTML/CSS/JS, WebGL, HTML Canvas, p5.js, THREE.js, Paper.js...).
 
 The generative art could be started remotly from a list of available arts. Using a web app served by the Electron app. The app should also publish a REST Api for remote control.
 
