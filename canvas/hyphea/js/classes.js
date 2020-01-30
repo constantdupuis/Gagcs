@@ -84,3 +84,100 @@ class Seed {
     return ret;
   }
 }
+
+class Branche{
+  rootPos = createVector(0,0);
+  startDir = random(0.0, TWO_PI);
+  startRadius = 10.0;
+  lastBud = null;
+  lastBuds = [];
+  buds = [];
+
+  lastBudsCount = 4;
+
+  dirDeviation = QUARTER_PI / 4.0;
+  newBudPosMove = 2.0;
+
+  constructor( rootPos, startDir, startRadius)
+  {
+    this.rootPos = rootPos;
+    this.startDir = startDir;
+    this.startRadius = startRadius;
+  }
+
+  log(){
+    console.log(`Branche pos[${this.rootPos}] dir[${this.startDir}] radius[${this.startRadius}]`);
+  }
+
+  newBud()
+  {
+    let ret;
+
+    if( this.lastBud == null)
+    {
+      let newDir = this.startDir + randomGaussian(0, this.dirDeviation);
+      let newPos = p5.Vector.add( this.rootPos, p5.Vector.fromAngle(newDir, this.newBudPosMove) );
+
+      ret = new Bud(newPos, newDir, this.startRadius);
+    }
+    else
+    {
+      let newDir = this.lastBud.dir + randomGaussian(0, this.dirDeviation);
+      let newPos = p5.Vector.add(  this.lastBud.pos, p5.Vector.fromAngle(newDir, this.newBudPosMove) );
+
+      ret = new Bud(newPos, newDir, this.lastBud.radius-0.05);
+    }
+    return ret;
+  }
+
+  grow( bud )
+  {
+    bud.draw();
+
+    if( this.lastBud == null)
+    { 
+      this.lastBud = bud;
+      this.lastBuds.push(bud);
+      if( this.lastBuds.length > this.lastBudsCount)
+      {
+        let tmp = this.lastBuds.shift();
+        this.buds.push(tmp);
+      }
+    }
+    else
+    {
+      this.lastBuds.push(this.lastBud);
+      this.lastBud = bud;
+      if( this.lastBuds.length > this.lastBudsCount)
+      {
+        let tmp = this.lastBuds.shift();
+        this.buds.push(tmp);
+      }
+    }
+  }
+}
+
+class Bud{
+  pos = createVector(0,0);
+  dir = 0.0;
+  radius = 0.0;
+
+  constructor(pos, dir, radius)
+  {
+    this.pos = pos;
+    this.dir = dir;
+    this.radius = radius;
+  }
+
+  log()
+  {
+    console.log(`Bud pos[${this.pos}] dir[${this.dir}] radius[${this.radius}]`);
+  }
+
+  draw()
+  {
+    fill(0);
+    noStroke();
+    circle(this.pos.x, this.pos.y, this.radius * 2);
+  }
+}
