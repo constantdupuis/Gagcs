@@ -82,6 +82,7 @@ class Branche{
       console.log("You cannot add a bud from another branch !");
       return;
     }
+    
     bud.draw();
 
     if( this.lastBud == null)
@@ -106,10 +107,12 @@ class Branche{
     }
 
     //create a child branch
-    if( this.oldBuds.length - this.lastchildBrancheCount > 10)
+    if( this.oldBuds.length - this.lastchildBrancheCount > 250)
     {
-      console.log("Create a child branche");
       this.lastchildBrancheCount = this.oldBuds.length;
+
+      console.log(`Create a child branche @${bud.pos}`);
+      
       let newBranche = this.ground.plantSeed(
           bud.pos, 
           bud.dir + QUARTER_PI + randomGaussian(0, QUARTER_PI/8,0),

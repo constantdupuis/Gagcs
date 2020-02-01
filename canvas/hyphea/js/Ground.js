@@ -6,6 +6,7 @@
 class Ground
 {
   branches = [];
+
   constructor()
   {}
 
@@ -29,33 +30,21 @@ class Ground
    */
   grow()
   {
+    console.log(`Ground::grow - ${this.branches.length} to grow`);
      this.branches.forEach(element => {
        if( element.growing)
        {
-         let freshBud = element.sprout();
+         
+        let freshBud = element.sprout();
+        // grow branche with freshBud
+        element.grow(freshBud);
 
-         // check if bud if not to close another banche
-         for(let bi = 0; bi < this.branches.length; bi++)
-         {
-           let b = this.branches[bi];
-           if( b.toClose(freshBud))
-           {
-             element.growing = false;
-           }
-         }
-
-         if( element.growing )
-         {
-           // grow branche with freshBud
-           element.grow(freshBud);
-
-           // out of canvas, stop growing
-           if( freshBud.pos.x > windowWidth-10 || freshBud.pos.x < 10 ||
-            freshBud.pos.y > windowHeight-10 || freshBud.pos.y < 10)
-            {
-              element.growing = false;
-            }
-         }
+        // if out of canvas, stop growing
+        if( freshBud.pos.x > windowWidth-10 || freshBud.pos.x < 10 ||
+        freshBud.pos.y > windowHeight-10 || freshBud.pos.y < 10)
+        {
+          element.growing = false;
+        }
        }
      });
   }
