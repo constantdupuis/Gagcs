@@ -1,52 +1,10 @@
 /**
- * Classe definitions
- */
-
-
- class Ground
- {
-   branches = [];
-   constructor()
-   {}
-
-   plantSeed(pos, dir, radius)
-   {
-    let b = new Branche(pos, dir, radius );
-    this.branches.push(b);
-    return b;
-   }
-
-   grow()
-   {
-      this.branches.forEach(element => {
-        if( element.growing)
-        {
-          let freshBud = element.sprout();
-          // check if bud if not to close another banche
-          for(let bi = 0; bi < this.branches.length; bi++)
-          {
-            let b = this.branches[bi];
-            if( b.toClose(freshBud))
-            {
-              element.growing = false;
-            }
-          }
-
-          if( element.growing )
-          {
-            element.grow(freshBud);
-          }
-        }
-      });
-   }
- }
-
-
-/**
  * Branche, that sprout buds to grow, but two branches cannot collide
  * @class
  */
 class Branche{
+  ground;
+  parentBranch = null;
   rootPos = createVector(0,0);
   startDir = random(0.0, TWO_PI);
   startRadius = 10.0;
@@ -193,34 +151,4 @@ class Branche{
     return false;
   }
   
-}
-
-/**
- * Dub, spouted out a branche, and ready to gro the branch
- * @class
- */
-class Bud{
-  branche = null;
-  pos = createVector(0,0);
-  dir = 0.0;
-  radius = 0.0;
-
-  constructor(pos, dir, radius)
-  {
-    this.pos = pos;
-    this.dir = dir;
-    this.radius = radius;
-  }
-
-  log()
-  {
-    console.log(`Bud pos[${this.pos}] dir[${this.dir}] radius[${this.radius}]`);
-  }
-
-  draw()
-  {
-    fill(0);
-    noStroke();
-    circle(this.pos.x, this.pos.y, this.radius * 2);
-  }
 }
