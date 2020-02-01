@@ -22,7 +22,7 @@ class Bud{
 
   draw()
   {
-    fill(0);
+    fill(82, 86, 53);
     noStroke();
     circle(this.pos.x, this.pos.y, this.radius * 2);
   }

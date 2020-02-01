@@ -33,6 +33,7 @@ class Ground
        if( element.growing)
        {
          let freshBud = element.sprout();
+
          // check if bud if not to close another banche
          for(let bi = 0; bi < this.branches.length; bi++)
          {

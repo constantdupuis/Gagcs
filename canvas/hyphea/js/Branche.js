@@ -3,8 +3,8 @@
  * @class
  */
 class Branche{
-  ground;
-  parentBranch = null;
+  ground = null;
+  parentBranche = null;
   rootPos = createVector(0,0);
   startDir = random(0.0, TWO_PI);
   startRadius = 10.0;
@@ -110,14 +110,14 @@ class Branche{
     {
       console.log("Create a child branche");
       this.lastchildBrancheCount = this.oldBuds.length;
-      let newBud = this.ground.plantSeed(
+      let newBranche = this.ground.plantSeed(
           bud.pos, 
           bud.dir + QUARTER_PI + randomGaussian(0, QUARTER_PI/8,0),
-          bud.radius - 1,0,
+          bud.radius - 1.0,
           bud.budShrinkRate,
-          bud.budMinRadius -1,0);
+          bud.budMinRadius - 1.0);
 
-      newBud.parentBranch = this;
+      newBranche.parentBranche = this;
     }
 
   }
@@ -129,6 +129,11 @@ class Branche{
    */
   toClose( bud )
   {
+    if( bud.branche.parentBranche === this && bud.branche.oldBuds.length < 20) 
+    {
+      console.log("Conpare to parent branch");
+      return false;
+    }
     // if sprout is not from this branche compare distance from newBuds also
     // if sprout is from this branche, distance from new buds might be to short 
     // and avoid growing
