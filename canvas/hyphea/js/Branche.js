@@ -11,6 +11,7 @@ class Branche{
   lastBud = null;
   newBuds = [];
   oldBuds = [];
+  lastchildBrancheCount = 0;
 
   growing = true;
 
@@ -21,11 +22,13 @@ class Branche{
   budMinRadius = 5.0;
   budShrinkRate = 0.995;
 
-  constructor( rootPos, startDir, startRadius)
+  constructor( rootPos, startDir, startRadius, shrinkRate, minRadius)
   {
     this.rootPos = rootPos;
     this.startDir = startDir;
     this.startRadius = startRadius;
+    this.budShrinkRate = shrinkRate;
+    this.budMinRadius = minRadius;
   }
 
   log(){
@@ -50,7 +53,7 @@ class Branche{
 
       ret = new Bud(newPos, newDir, this.startRadius);
     }
-    else // this not first bud
+    else // this is not first bud of the branch
     {
       // set new params base on previous bud
       let newDir = this.lastBud.dir + randomGaussian(0, this.dirDeviation);
@@ -76,7 +79,7 @@ class Branche{
   {
     if( bud.branche !== this)
     {
-      console.log("Try to add a bud from another branch !");
+      console.log("You cannot add a bud from another branch !");
       return;
     }
     bud.draw();
@@ -101,6 +104,22 @@ class Branche{
         this.oldBuds.push(tmp);
       }
     }
+
+    //create a child branch
+    if( this.oldBuds.length - this.lastchildBrancheCount > 10)
+    {
+      console.log("Create a child branche");
+      this.lastchildBrancheCount = this.oldBuds.length;
+      let newBud = this.ground.plantSeed(
+          bud.pos, 
+          bud.dir + QUARTER_PI + randomGaussian(0, QUARTER_PI/8,0),
+          bud.radius - 1,0,
+          bud.budShrinkRate,
+          bud.budMinRadius -1,0);
+
+      newBud.parentBranch = this;
+    }
+
   }
 
   /**

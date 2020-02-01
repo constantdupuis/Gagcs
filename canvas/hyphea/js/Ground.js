@@ -16,9 +16,9 @@ class Ground
    * @param {number} dir - direction of the new seed
    * @param {number} radius - start radius of the seed
    */
-  plantSeed(pos, dir, radius)
+  plantSeed(pos, dir, radius, shrinkRate, minRadius)
   {
-   let b = new Branche(pos, dir, radius );
+   let b = new Branche(pos, dir, radius, shrinkRate, minRadius );
    b.ground = this;
    this.branches.push(b);
    return b;
@@ -49,8 +49,8 @@ class Ground
            element.grow(freshBud);
 
            // out of canvas, stop growing
-           if( freshBud.pos.x > windowWidth || freshBud.pos.x < 0 ||
-            freshBud.pos.y > windowHeight || freshBud.pos.y < 0)
+           if( freshBud.pos.x > windowWidth-10 || freshBud.pos.x < 10 ||
+            freshBud.pos.y > windowHeight-10 || freshBud.pos.y < 10)
             {
               element.growing = false;
             }
