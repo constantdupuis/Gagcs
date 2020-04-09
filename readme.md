@@ -12,8 +12,8 @@ And later again migrate REST API to GraphQL.
 # Remote Control Web pages
 
 ## Color scheme inspiration
-https://visme.co/blog/website-color-schemes/
-https://digitalsynopsis.com/design/minimal-web-color-palettes-combination-hex-code/
+* https://visme.co/blog/website-color-schemes/
+* https://digitalsynopsis.com/design/minimal-web-color-palettes-combination-hex-code/
   
 
 # Resources
