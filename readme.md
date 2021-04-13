@@ -15,31 +15,32 @@ Depends on
 
 * git
 
+* git flow
+
 * git lfs
 
 * nodejs
 
 * npm
 
-
-
 Clone the repos and activate LFS.
 
 If lfs is not install install it.
 
 ```shell
-sudo apt install -y git-lfs
+sudo apt update
+sudo apt install -y git-lfs git-flow
 ```
 
 ```shell
 git clone https://github.com/constantdupuis/Gagcs.git
-git install lfs
+git lfs install
+git flow init
 ```
 
 Install nodejs and npm.
 
 ```shell
-sudo apt update
 sudo apt install -y nodejs npm
 ```
 
@@ -49,9 +50,11 @@ Change dir to Gags and run
 npm install
 ```
 
+After that Gags remote web ui should be available at [http://localhost:33366](http://localhost:33366).
+
 # Remote Control Web pages
 
-Remote control web interface is exposed on port 33366.
+Remote control web interface is exposed on port 33366. 
 
 ## Color scheme inspiration
 
