@@ -11,9 +11,10 @@ ctrl.load = function(mainWindow) {
   this.mainWindow = mainWindow;
   this.model.load(() => {
     if (this.model.canvas.length == 0) {
-      console.log("Load no canvas HTML warning");
+      console.log("No canvas available");
       mainWindow.loadFile("nocanvas.html");
     } else {
+      // load first canvas, later should be the default selected one
       this.loadCanvas(0);
     }
     // set web api rounting

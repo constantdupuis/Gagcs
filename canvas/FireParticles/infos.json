@@ -1,4 +1,6 @@
 {
+  "type": "GenerativeArt",
+  "tags": ["Particles"],
   "name": "Fire Particles",
   "description": "Show different fire particles. Use p5.js."
 }

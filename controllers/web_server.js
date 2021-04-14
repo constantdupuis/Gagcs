@@ -53,7 +53,7 @@ webServer.addRESTRoutes = function() {
 
   const apiRoute = express.Router();
 
-  // root route, return info an app
+  // root route, return info on app
   apiRoute.get("/", (req, res) => {
     res.json({
       api: "Remote Control",
